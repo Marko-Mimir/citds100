@@ -48,12 +48,12 @@ class environment:
                     return "OK"
         
         def parseCode(self) -> str:
-            if self.code == []:
+            if self.code == "":
                 return "OK"
             split = self.code.split("\n")
             
             if split[self.line].split(" ")[0] not in self.codeParser.keys():
-                return f"error at line [{self.line}] with value [{split[self.line]}]"
+                return f"error at line [{self.line}]. NODEID: {[(self.index[1]*(self.maxHor+1))+(self.index[0]+1)]}"
             
             res = self.codeParser[split[self.line].split(" ")[0]](self, split[self.line])
             if res == "OK":
@@ -65,17 +65,18 @@ class environment:
             return "OK"
         
         def move(self, line : str): # THIS IS A BIGG MESS :(((
-            move = copy.deepcopy(self.index)
-            exist = True
+            move = copy.deepcopy(self.index)#DEEP COPY BECAUSE PYTHON IS DUMB
+            exist = True # index[0] = horiz, index[1] = vert
             direction = line.split(" ")[1].lower()
             match direction:
                 case "up" | "u":
-                    move[1] = move[1]+1
-                    if move[1] > self.maxVert:
+                    move[1] = move[1]-1
+                    if move[1] <0:
                         exist = False
                 case "down" | "d":
-                    move[1] = move[1]-1
-                    if move[1] < 0:
+                    print("CASE DOWN")
+                    move[1] = move[1]+1
+                    if move[1] > self.maxVert:
                         exist = False
                 case "left" | "l":
                     move[0] = move[0]-1
@@ -89,6 +90,8 @@ class environment:
                     return "err"
             if exist == False:
                 if self.outputDir == direction:
+                    if self.eax == None:
+                        return
                     self.env.placeOut(self.eax)
                     self.eax = None
                     return "OK"
@@ -250,6 +253,7 @@ class environment:
                 if res != "OK":
                     return f"ERROR: [{res}]"
         if len(self.expectedOutput) == len(self.output):
+            self.inputList = []
             return "DONE"
         self.stepInt += 1
         print(f"Grid is on step {self.stepInt}")
