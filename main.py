@@ -5,7 +5,7 @@ from interactions.ext.prefixed_commands import prefixed_command, PrefixedContext
 from environment import environment
 
 signedIn = False
-bot = Client(token="ODUyOTMwMzAwMTIzMTUyMzk0.GEAAuR.7z2c0Kbs073jIK0zblLEvCYEvOTR1uGjJO9AsE",
+bot = Client(token="xxx",
 intents=Intents.new(default=True, guild_messages=True, message_content=True),
 status=interactions.Status.DND, activity= interactions.Activity("the nodemap", interactions.ActivityType.WATCHING))
 env : environment = None
